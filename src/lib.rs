@@ -83,12 +83,12 @@ impl<'a, T: std::cmp::PartialEq> Scanner<'a, T> {
 
     /// Returns the next character without advancing the cursor.
     /// AKA "lookahead"
-    pub fn peek(&self) -> Option<&T> {
+    pub fn peek(&self) -> Option<&'a T> {
         self.buffer.get(self.cursor)
     }
 
     /// Returns the next character (if available) and advances the cursor.
-    pub fn pop(&mut self) -> Option<&T> {
+    pub fn pop(&mut self) -> Option<&'a T> {
         match self.buffer.get(self.cursor) {
             Some(character) => {
                 self.cursor += 1;
