@@ -2,7 +2,7 @@
 
 ## generic_scanner
 
-This crate is for educational purposes. It's based in the [Lyn crate] and the blog post
+This crate is for educational purposes. It's based on the [Lyn crate] and the blog post
 "[A Beginner's Guide to Parsing in Rust]". A scanner is used to read the source one character
 at a time, this characters can then be converted into tokens.
 
@@ -28,6 +28,13 @@ fn main() {
     assert_eq!(Some(&71), scanner.pop());
     assert_eq!(false, scanner.take(&84));
     assert_eq!(true, scanner.take(&69));
+
+    // Create a new scanner
+    let mut scanner = Scanner::new(&['2','3','4','5','6']);
+    assert_eq!(Some(&'2'), scanner.peek());
+    assert_eq!(Some(&'2'), scanner.pop());
+    assert_eq!(false, scanner.take(&'5'));
+    assert_eq!(true, scanner.take(&'3'));
 }
 ```
 
@@ -53,7 +60,10 @@ fn get_method(scanner: &mut Scanner<u8>) -> Vec<u8>{
     let mut metod: Vec<u8> = vec![];
     // Loop until a whitespace is found
     while !scanner.take(&32) {
-        metod.push(*scanner.pop().unwrap());
+        match scanner.pop() {
+            Some(value) => metod.push(*value),
+            None => {},
+        }
     }
     metod
 }
