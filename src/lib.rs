@@ -127,19 +127,8 @@ impl<'a, T: std::cmp::PartialEq> Scanner<'a, T> {
         }
     }
 
-    /// Invoke `cb` once. If the result is not `None`, return it and advance
-    /// the cursor. Otherwise, return None and leave the cursor unchanged.
-    pub fn transform<A>(&mut self, cb: impl FnOnce(&T) -> Option<A>,) -> Option<A> {
-        match self.buffer.get(self.cursor) {
-            Some(input) => match cb(input) {
-                Some(output) => {
-                    self.cursor += 1;
-
-                    Some(output)
-                },
-                None => None
-            },
-            None => None
-        }
+    /// Returns the requested slice from the buffer without advancing the cursor
+    pub fn slice(&self, start: usize, end: usize) -> Option<&'a [T]> {
+        self.buffer.get(start..end)
     }
 }
