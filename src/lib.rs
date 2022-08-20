@@ -13,6 +13,7 @@
 
 //! # Examples
 //! ```
+//! use generic_scanner::Scanner;
 //! fn main() {
 //!     // Create a new scanner
 //!     let mut scanner = Scanner::new(&[2,3,4,5,6]);
@@ -39,6 +40,7 @@
 //!
 //! Using the Scanner to find an http request method.
 //! ```
+//! use generic_scanner::Scanner;
 //! fn main() {
 //!     // Create a new scanner
 //!     let mut scanner = Scanner::new(b"GET / HTTP/1.1\r\n");
@@ -114,8 +116,8 @@ impl<'a, T: std::cmp::PartialEq> Scanner<'a, T> {
     /// Otherwise, returns false leaving the cursor unchanged.
     pub fn take(&mut self, target: &T) -> bool {
         match self.buffer.get(self.cursor) {
-            Some(character) => {
-                if target == character {
+            Some(element) => {
+                if target == element {
                     self.cursor += 1;
 
                     true
@@ -123,6 +125,24 @@ impl<'a, T: std::cmp::PartialEq> Scanner<'a, T> {
                     false
                 }
             }
+            None => false,
+        }
+    }
+
+    /// Returns true if the `target` is found at the current cursor position,
+    /// and advances the cursor.
+    /// Otherwise, returns false leaving the cursor unchanged.
+    pub fn match_stream(&mut self, target: &'a [T]) -> bool {
+        match self.buffer.get(self.cursor..target.len()) {
+            Some(stream) => {
+                if target == stream {
+                    self.cursor += target.len();
+                    true
+                }
+                else {
+                    false
+                }
+            },
             None => false,
         }
     }
