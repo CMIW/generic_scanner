@@ -132,7 +132,7 @@ impl<'a, T: std::cmp::PartialEq> Scanner<'a, T> {
     /// Returns true if the `target` is found at the current cursor position,
     /// and advances the cursor.
     /// Otherwise, returns false leaving the cursor unchanged.
-    pub fn match_stream(&mut self, target: &'a [T]) -> bool {
+    pub fn contains(&mut self, target: &'a [T]) -> bool {
         match self.buffer.get(self.cursor..target.len()) {
             Some(stream) => {
                 if target == stream {
